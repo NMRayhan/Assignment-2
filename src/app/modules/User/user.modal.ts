@@ -15,7 +15,10 @@ const FullNameSchema = new Schema<FullName>({
     }
 });
 
-const HobbiesSchema = new Schema<string[]>([]);
+const HobbiesSchema = new Schema<string>({
+    type: [String],
+    default: [],
+});
 
 const AddressSchema = new Schema<Address>({
     street: String,
@@ -48,11 +51,13 @@ const UserSchema = new Schema<User>({
     age: String,
     fullName: FullNameSchema,
     email: {
+        type: String,
+        required: true,
         validate: {
             validator: (value: string) => {
                 return validator.isEmail(value) ? true : false;
             },
-            message: "Email is Not a valid"
+            message: "email is not a valid"
         }
     },
     isActive: {
