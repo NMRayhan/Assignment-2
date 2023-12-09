@@ -23,6 +23,7 @@
         "quotes": [
             "error",
             "double"
-        ]
+        ],
+        "no-unused-vars": "off"
     }
 }

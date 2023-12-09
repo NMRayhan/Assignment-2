@@ -15,11 +15,6 @@ const FullNameSchema = new Schema<FullName>({
     }
 });
 
-const HobbiesSchema = new Schema<string>({
-    type: [String],
-    default: [],
-});
-
 const AddressSchema = new Schema<Address>({
     street: String,
     city: String,
@@ -36,7 +31,8 @@ const UserSchema = new Schema<User>({
     userId: {
         type: Number,
         required: true,
-        unique: true
+        unique: true,
+        message: "userId must be unique. This userId is already taken.",
     },
     password: {
         type: String,
@@ -46,9 +42,10 @@ const UserSchema = new Schema<User>({
     userName: {
         type: String,
         required: [true, "userName is required"],
-        unique: true
+        unique: true,
+        message: "Username must be unique. This username is already taken.",
     },
-    age: String,
+    age: Number,
     fullName: FullNameSchema,
     email: {
         type: String,
@@ -64,7 +61,10 @@ const UserSchema = new Schema<User>({
         type: Boolean,
         default: true,
     },
-    hobbies: HobbiesSchema,
+    hobbies: {
+        type: [String],
+        default: [],
+    },
     address: AddressSchema,
     orders: OrderSchema
 
