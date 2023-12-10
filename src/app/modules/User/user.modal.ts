@@ -1,8 +1,11 @@
-import { Model, Schema, model } from "mongoose";
-import { Address, FullName, Order, User } from "./user.interface";
+/* eslint-disable @typescript-eslint/no-this-alias */
+import { Schema, model } from "mongoose";
 import validator from "validator";
+import { TAddress, TFullName, TOrder, TUser, UserModel } from "./user.interface";
+import bcrypt from "bcrypt";
+import config from "../../config";
 
-const FullNameSchema = new Schema<FullName>({
+const FullNameSchema = new Schema<TFullName>({
     firstName: {
         type: String,
         trim: true,
@@ -15,19 +18,19 @@ const FullNameSchema = new Schema<FullName>({
     }
 });
 
-const AddressSchema = new Schema<Address>({
+const AddressSchema = new Schema<TAddress>({
     street: String,
     city: String,
     country: String
 });
 
-const OrderSchema = new Schema<Order>({
+const OrderSchema = new Schema<TOrder>({
     price: Number,
     productName: String,
     quantity: Number
 });
 
-const UserSchema = new Schema<User>({
+const UserSchema = new Schema<TUser, UserModel>({
     userId: {
         type: Number,
         required: true,
@@ -71,4 +74,43 @@ const UserSchema = new Schema<User>({
 
 });
 
-export const UserModel: Model<User> = model<User>("Users", UserSchema);
+
+// pre save middleware
+UserSchema.pre("save", async function (next) {
+    const user = this;
+    user.password = await bcrypt.hash(user.password as string, Number(config.bcryptSaltRound),
+    );
+    next();
+});
+
+// post save middleware
+UserSchema.post("save", function (doc, next) {
+    doc.password = "";
+    next();
+});
+
+
+// Query Middleware
+// studentSchema.pre('find', function (next) {
+//     this.find({ isDeleted: { $ne: true } });
+//     next();
+//   });
+
+//   studentSchema.pre('findOne', function (next) {
+//     this.find({ isDeleted: { $ne: true } });
+//     next();
+//   });
+
+// studentSchema.pre('aggregate', function (next) {
+//     this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
+//     next();
+//   });
+
+// custom static method
+UserSchema.statics.isUserExist = async function (userName: string) {
+    const existingUser = await User.findOne({ userName: userName });
+    return existingUser;
+};
+
+
+export const User = model<TUser, UserModel>("Users", UserSchema);

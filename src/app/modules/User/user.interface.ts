@@ -1,29 +1,35 @@
-export interface FullName {
+import { Model } from "mongoose";
+
+export interface TFullName {
     firstName?: string,
     lastName?: string
 }
 
-export interface Address {
+export interface TAddress {
     street?: string,
     city?: string,
     country?: string,
 }
 
-export interface Order {
+export interface TOrder {
     productName?: string,
     price?: number,
     quantity?: number
 }
 
-export interface User {
+export interface TUser {
     userId?: number,
     userName?: string,
     password?: string,
-    fullName?: FullName,
+    fullName?: TFullName,
     age?: number,
     email?: string,
     isActive?: boolean,
     hobbies?: string[],
-    address?: Address,
-    orders?: Order
+    address?: TAddress,
+    orders?: TOrder
+}
+
+export interface UserModel extends Model<TUser> {
+    isUserExist(userName: string): Promise<TUser | null>;
 }
