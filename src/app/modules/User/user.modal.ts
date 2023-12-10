@@ -69,7 +69,11 @@ const UserSchema = new Schema<TUser, UserModel>({
         default: [],
     },
     address: AddressSchema,
-    orders: OrderSchema
+    orders: OrderSchema,
+    isDeleteUser: {
+        type: Boolean,
+        default: false
+    }
 
 
 });
@@ -91,20 +95,21 @@ UserSchema.post("save", function (doc, next) {
 
 
 // Query Middleware
-// studentSchema.pre('find', function (next) {
-//     this.find({ isDeleted: { $ne: true } });
-//     next();
-//   });
+UserSchema.pre("find", function (next) {
+    this.find({ isDeleteUser: { $ne: true } });
+    next();
+});
 
-//   studentSchema.pre('findOne', function (next) {
-//     this.find({ isDeleted: { $ne: true } });
-//     next();
-//   });
+UserSchema.pre("findOne", function (next) {
+    this.find({ isDeleteUser: { $ne: true } });
+    next();
+});
 
-// studentSchema.pre('aggregate', function (next) {
-//     this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
-//     next();
-//   });
+UserSchema.pre("aggregate", function (next) {
+    this.pipeline().unshift({ $match: { isDeleteUser: { $ne: true } } });
+    next();
+});
+
 
 // custom static method
 UserSchema.statics.isUserExist = async function (userName: string) {

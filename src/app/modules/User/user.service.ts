@@ -13,17 +13,20 @@ const createUser = async (userData: TUser) => {
 };
 
 const getUsers = async () => {
-    const result = await User.find({});
+    const result = await User.find({ fullName: 1, userName: 1, age: 1, email: 1, address: 1 });
     return result;
 };
 
-const getSingleUser = async (id: string) => {
-    const result = await User.aggregate([{ $match: { id } }]);
+const getSingleUser = async (userId: number) => {
+    const result = await User.aggregate([
+        { $match: { userId: userId } },
+        { $sort: { fullName: 1, userName: 1, age: 1, email: 1, address: 1 } }
+    ]);
     return result;
 };
 
-const deleteUser = async (id: string) => {
-    const result = await User.updateOne({ id }, { isDeleted: true });
+const deleteUser = async (userId: number) => {
+    const result = await User.updateOne({ userId }, { isDeleteUser: true });
     return result;
 };
 
