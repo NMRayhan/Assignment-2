@@ -110,6 +110,12 @@ UserSchema.pre("aggregate", function (next) {
     next();
 });
 
+// Equivalent to calling `pre()` on `updateOne`, `findOneAndUpdate`.
+UserSchema.pre("updateOne", function (next) {
+    this.updateOne({});
+    next();
+});
+
 
 // custom static method
 UserSchema.statics.isUserExist = async function (userName: string) {

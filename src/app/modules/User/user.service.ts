@@ -38,7 +38,17 @@ const deleteUser = async (userId: number) => {
     }
 };
 
+const updateUser = async (userId: number, body: TUser) => {
+
+    // checking existence
+    if (await User.userFinding(userId)) {
+        return await User.updateOne({ userId }, { body });
+    } else {
+        throw new Error("No User found");
+    }
+};
+
 
 export const UserService = {
-    createUser, getUsers, getSingleUser, deleteUser
+    createUser, getUsers, getSingleUser, deleteUser, updateUser
 };
