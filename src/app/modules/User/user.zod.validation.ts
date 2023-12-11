@@ -43,7 +43,7 @@ export const UserZodSchema = z.object({
 
     address: AddressSchema,
 
-    orders: OrderSchema,
+    orders: z.array(OrderSchema),
 
     isDeleteUser: z.boolean().default(false),
 });

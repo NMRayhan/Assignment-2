@@ -102,10 +102,33 @@ const updateUser = async (req: Request, res: Response) => {
     }
 };
 
-const updateUserWithOrder = async (req: Request, res: Response) => {
+const getUserOrders = async (req: Request, res: Response) => {
     try {
         const { userId } = req.params;
-        console.log(userId);
+        const result = await UserService.getUserOrders(Number(userId));
+        res.status(200).json({
+            success: true,
+            message: "Order fetched successfully!",
+            data: result
+        });
+    } catch (error: any) {
+        res.status(404).json({
+            success: false,
+            message: error?.message || "No Data Found",
+            error: error
+        });
+    }
+};
+
+const getTotalByUserId = async (req: Request, res: Response) => {
+    try {
+        const { userId } = req.params;
+        const result = await UserService.getTotalByUserId(Number(userId));
+        res.status(200).json({
+            success: true,
+            message: "Total price calculated successfully!",
+            data: result
+        });
     } catch (error: any) {
         res.status(404).json({
             success: false,
@@ -116,7 +139,13 @@ const updateUserWithOrder = async (req: Request, res: Response) => {
 };
 
 
-
 export const UserController = {
-    homePage, createUser, getUsers, getSingleUser, deleteSingleUser, updateUser, updateUserWithOrder
+    homePage,
+    createUser,
+    getUsers,
+    getSingleUser,
+    deleteSingleUser,
+    updateUser,
+    getUserOrders,
+    getTotalByUserId
 };

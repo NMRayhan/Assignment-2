@@ -59,11 +59,35 @@ const updateUser = async (userId: number, body: TUser) => {
     }
 };
 
-const updateUserWithOrder = async () => {
+const getUserOrders = async (userId: number) => {
+    // checking existence
+    if (await User.userFinding(userId)) {
+        const result = await User.findOne({ userId }, { orders: 1 });
+        return result;
+    } else {
+        throw new Error("No User found");
+    }
+};
 
+const getTotalByUserId = async (userId: number) => {
+    // checking existence
+    if (await User.userFinding(userId)) {
+        const result = await User.aggregate([
+            { $match: { userId } },
+        ]);
+        return result;
+    } else {
+        throw new Error("No User found");
+    }
 };
 
 
 export const UserService = {
-    createUser, getUsers, getSingleUser, deleteUser, updateUser, updateUserWithOrder
+    createUser,
+    getUsers,
+    getSingleUser,
+    deleteUser,
+    updateUser,
+    getUserOrders,
+    getTotalByUserId
 };

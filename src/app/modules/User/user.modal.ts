@@ -81,7 +81,10 @@ const UserSchema = new Schema<TUser, UserModel>({
         default: [],
     },
     address: AddressSchema,
-    orders: OrderSchema,
+    orders: {
+        type: [OrderSchema],
+        default: []
+    },
     isDeleteUser: {
         type: Boolean,
         default: false

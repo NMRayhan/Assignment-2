@@ -16,4 +16,8 @@ UserRoute.delete("/api/users/:userId", UserController.deleteSingleUser);
 
 UserRoute.put("/api/users/:userId", UserController.updateUser);
 
-UserRoute.put("/api/users/:userId/orders", UserController.updateUserWithOrder);
+UserRoute.get("/api/users/:userId/orders", UserController.getUserOrders);
+
+UserRoute.get("/api/users/:userId/orders/total-price", UserController.getTotalByUserId);
+
+// UserRoute.put("/api/users/:userId/orders", UserController.updateUserWithOrder);

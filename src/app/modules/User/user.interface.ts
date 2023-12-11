@@ -27,7 +27,7 @@ export interface TUser {
     isActive?: boolean,
     hobbies?: string[],
     address?: TAddress,
-    orders?: TOrder,
+    orders?: TOrder[],
     isDeleteUser?: boolean,
 }
 
