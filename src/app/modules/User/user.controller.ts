@@ -3,6 +3,13 @@ import { Request, Response } from "express";
 import { UserService } from "./user.service";
 import UserZodSchema from "./user.zod.validation";
 
+const homePage = async (req: Request, res: Response) => {
+    res.status(200).json({
+        status: true,
+        message: "Congratulations, Server Running Successfully Done, And This is Home Page",
+    });
+};
+
 const createUser = async (req: Request, res: Response) => {
     try {
         const { user: userData } = req.body;
@@ -95,8 +102,21 @@ const updateUser = async (req: Request, res: Response) => {
     }
 };
 
+const updateUserWithOrder = async (req: Request, res: Response) => {
+    try {
+        const { userId } = req.params;
+        console.log(userId);
+    } catch (error: any) {
+        res.status(404).json({
+            success: false,
+            message: error?.message || "No Data Found",
+            error: error
+        });
+    }
+};
+
 
 
 export const UserController = {
-    createUser, getUsers, getSingleUser, deleteSingleUser, updateUser
+    homePage, createUser, getUsers, getSingleUser, deleteSingleUser, updateUser, updateUserWithOrder
 };
