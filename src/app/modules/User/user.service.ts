@@ -69,6 +69,7 @@ const getUserOrders = async (userId: number) => {
     }
 };
 
+// get total by user id
 const getTotalByUserId = async (userId: number) => {
     // checking existence
     if (await User.userFinding(userId)) {
@@ -86,6 +87,8 @@ const getTotalByUserId = async (userId: number) => {
                     },
                 },
             },
+            // project stage send only totalPrice
+            { $project: { totalPrice: 1, _id: 0 } }
         ]);
         return result;
     } else {
