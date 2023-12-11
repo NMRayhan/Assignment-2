@@ -123,10 +123,10 @@ UserSchema.pre("aggregate", function (next) {
 });
 
 // Equivalent to calling `pre()` on `updateOne`.
-// UserSchema.pre("updateOne", function (next) {
-//     this.find({ isDeleteUser: { $ne: true } });
-//     next();
-// });
+UserSchema.pre("updateOne", function (next) {
+    this.find({ isDeleteUser: { $ne: true } });
+    next();
+});
 
 
 // custom static method

@@ -39,16 +39,13 @@ const deleteUser = async (userId: number) => {
 };
 
 const updateUser = async (userId: number, body: TUser) => {
-
     // checking existence
     if (await User.userFinding(userId)) {
-
         // checking same user Name
         if (await User.isUserExist(body.userName as string)) {
             throw new Error("UserName Already Exist");
         }
-        const result = await User.updateOne({ userId }, { $set: { body } });
-        console.log(result, body);
+        const result = await User.updateOne({ userId }, { $set: body });
         if (result.acknowledged === true) {
             return result;
         } else {
