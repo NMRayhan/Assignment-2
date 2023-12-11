@@ -1,4 +1,4 @@
-import { TUser } from "./user.interface";
+import { TOrder, TUser } from "./user.interface";
 import { User } from "./user.modal";
 
 
@@ -36,7 +36,7 @@ const deleteUser = async (userId: number) => {
     if (await User.userFinding(userId)) {
         return await User.updateOne({ userId }, { isDeleteUser: true });
     } else {
-        throw new Error("No User found");
+        throw new Error("User not found");
     }
 };
 
@@ -52,20 +52,37 @@ const updateUser = async (userId: number, body: TUser) => {
         if (result.acknowledged === true) {
             return result;
         } else {
-            throw new Error("User Not Updated");
+            throw new Error("User not updated");
         }
     } else {
-        throw new Error("No User found");
+        throw new Error("User not found");
     }
 };
 
+// add order to user
+const addOrderToUser = async (userId: number, order: TOrder) => {
+    // checking existence
+    if (await User.userFinding(userId)) {
+        const result = await User.updateOne({ userId }, { $push: { orders: order } });
+        if (result.acknowledged === true) {
+            return result;
+        } else {
+            throw new Error("User not updated");
+        }
+    } else {
+        throw new Error("User not found");
+    }
+};
+
+
+// get user Orders
 const getUserOrders = async (userId: number) => {
     // checking existence
     if (await User.userFinding(userId)) {
         const result = await User.findOne({ userId }, { orders: 1 });
         return result;
     } else {
-        throw new Error("No User found");
+        throw new Error("User not found");
     }
 };
 
@@ -92,7 +109,7 @@ const getTotalByUserId = async (userId: number) => {
         ]);
         return result;
     } else {
-        throw new Error("No User found");
+        throw new Error("User not found");
     }
 };
 
@@ -104,5 +121,6 @@ export const UserService = {
     deleteUser,
     updateUser,
     getUserOrders,
-    getTotalByUserId
+    getTotalByUserId,
+    addOrderToUser
 };

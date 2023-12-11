@@ -102,6 +102,25 @@ const updateUser = async (req: Request, res: Response) => {
     }
 };
 
+const addOrderToUser = async (req: Request, res: Response) => {
+    try {
+        const { userId } = req.params;
+        const { orders } = req.body;
+        await UserService.addOrderToUser(Number(userId), orders);
+        res.status(200).json({
+            success: true,
+            message: "Order created successfully!",
+            data: null
+        });
+    } catch (error: any) {
+        res.status(404).json({
+            success: false,
+            message: error?.message || "No Data Found",
+            error: error
+        });
+    }
+};
+
 const getUserOrders = async (req: Request, res: Response) => {
     try {
         const { userId } = req.params;
@@ -147,5 +166,6 @@ export const UserController = {
     deleteSingleUser,
     updateUser,
     getUserOrders,
-    getTotalByUserId
+    getTotalByUserId,
+    addOrderToUser
 };

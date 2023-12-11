@@ -20,4 +20,4 @@ UserRoute.get("/api/users/:userId/orders", UserController.getUserOrders);
 
 UserRoute.get("/api/users/:userId/orders/total-price", UserController.getTotalByUserId);
 
-// UserRoute.put("/api/users/:userId/orders", UserController.updateUserWithOrder);
+UserRoute.put("/api/users/:userId/orders", UserController.addOrderToUser);
