@@ -73,7 +73,19 @@ const getTotalByUserId = async (userId: number) => {
     // checking existence
     if (await User.userFinding(userId)) {
         const result = await User.aggregate([
-            { $match: { userId } },
+            // match stage match document by userId
+            { $match: { userId: 6 } },
+            // unwind stage destructure order array of object to single object
+            { $unwind: "$orders" },
+            // group stage calculate the total price of order quantity and price
+            {
+                $group: {
+                    _id: null,
+                    totalPrice: {
+                        $sum: { $multiply: ["$orders.quantity", "$orders.price"] },
+                    },
+                },
+            },
         ]);
         return result;
     } else {
