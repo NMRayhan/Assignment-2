@@ -19,9 +19,18 @@ const FullNameSchema = new Schema<TFullName>({
 });
 
 const AddressSchema = new Schema<TAddress>({
-    street: String,
-    city: String,
-    country: String
+    street: {
+        type: String,
+        trim: true,
+    },
+    city: {
+        type: String,
+        trim: true,
+    },
+    country: {
+        type: String,
+        trim: true,
+    },
 });
 
 const OrderSchema = new Schema<TOrder>({
@@ -40,12 +49,14 @@ const UserSchema = new Schema<TUser, UserModel>({
     password: {
         type: String,
         required: true,
+        trim: true,
         minlength: [6, "Must be at least 6 digit"]
     },
     userName: {
         type: String,
         required: [true, "userName is required"],
         unique: true,
+        trim: true,
         message: "Username must be unique. This username is already taken.",
     },
     age: Number,
@@ -53,6 +64,7 @@ const UserSchema = new Schema<TUser, UserModel>({
     email: {
         type: String,
         required: true,
+        trim: true,
         validate: {
             validator: (value: string) => {
                 return validator.isEmail(value) ? true : false;
@@ -110,11 +122,11 @@ UserSchema.pre("aggregate", function (next) {
     next();
 });
 
-// Equivalent to calling `pre()` on `updateOne`, `findOneAndUpdate`.
-UserSchema.pre("updateOne", function (next) {
-    this.updateOne({});
-    next();
-});
+// Equivalent to calling `pre()` on `updateOne`.
+// UserSchema.pre("updateOne", function (next) {
+//     this.find({ isDeleteUser: { $ne: true } });
+//     next();
+// });
 
 
 // custom static method

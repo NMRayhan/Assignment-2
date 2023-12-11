@@ -3,14 +3,14 @@ import { z } from "zod";
 
 
 const FullNameSchema = z.object({
-    firstName: z.string().max(20, { message: "firstName cannot be more than 20 characters" }),
-    lastName: z.string().max(20, { message: "lastName cannot be more than 20 characters" }),
+    firstName: z.string().trim().max(20, { message: "firstName cannot be more than 20 characters" }),
+    lastName: z.string().trim().max(20, { message: "lastName cannot be more than 20 characters" }),
 });
 
 const AddressSchema = z.object({
-    street: z.string(),
-    city: z.string(),
-    country: z.string(),
+    street: z.string().trim(),
+    city: z.string().trim(),
+    country: z.string().trim(),
 });
 
 const OrderSchema = z.object({
@@ -22,7 +22,7 @@ const OrderSchema = z.object({
 export const UserZodSchema = z.object({
     userId: z.number(),
 
-    password: z.string().min(6, { message: "Must be at least 6 characters" }),
+    password: z.string().trim().min(6, { message: "Must be at least 6 characters" }),
 
     userName: z.string({
         required_error: "userName is required",
@@ -35,7 +35,7 @@ export const UserZodSchema = z.object({
 
     email: z.string({
         required_error: "email is required",
-    }).email({ message: "email is not valid" }),
+    }).trim().email({ message: "email is not valid" }),
 
     isActive: z.boolean().default(true),
 

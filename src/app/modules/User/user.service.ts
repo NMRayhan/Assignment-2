@@ -42,7 +42,18 @@ const updateUser = async (userId: number, body: TUser) => {
 
     // checking existence
     if (await User.userFinding(userId)) {
-        return await User.updateOne({ userId }, { body });
+
+        // checking same user Name
+        if (await User.isUserExist(body.userName as string)) {
+            throw new Error("UserName Already Exist");
+        }
+        const result = await User.updateOne({ userId }, { $set: { body } });
+        console.log(result, body);
+        if (result.acknowledged === true) {
+            return result;
+        } else {
+            throw new Error("User Not Updated");
+        }
     } else {
         throw new Error("No User found");
     }

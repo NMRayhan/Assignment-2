@@ -78,11 +78,12 @@ const deleteSingleUser = async (req: Request, res: Response) => {
 const updateUser = async (req: Request, res: Response) => {
     try {
         const { userId } = req.params;
-        const body = req.body;
-        await UserService.updateUser(Number(userId), body);
+        const { user: updatedData } = req.body;
+        const validateData = UserZodSchema.parse(updatedData);
+        await UserService.updateUser(Number(userId), validateData);
         res.status(200).json({
             success: true,
-            message: "User deleted successfully!",
+            message: "User Updated successfully!",
             data: null
         });
     } catch (error: any) {
