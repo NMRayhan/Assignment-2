@@ -12,7 +12,7 @@ const homePage = async (req: Request, res: Response) => {
 
 const createUser = async (req: Request, res: Response) => {
     try {
-        const { user: userData } = req.body;
+        const userData = req.body;
         const validateData = UserZodSchema.parse(userData);
         const result = await UserService.createUser(validateData);
         res.status(201).json({
@@ -87,11 +87,11 @@ const updateUser = async (req: Request, res: Response) => {
         const { userId } = req.params;
         const { user: updatedData } = req.body;
         const validateData = UserZodSchema.parse(updatedData);
-        await UserService.updateUser(Number(userId), validateData);
+        const result = await UserService.updateUser(Number(userId), validateData);
         res.status(200).json({
             success: true,
             message: "User Updated successfully!",
-            data: null
+            data: result
         });
     } catch (error: any) {
         res.status(404).json({
